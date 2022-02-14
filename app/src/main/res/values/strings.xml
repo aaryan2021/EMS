@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">EMS</string>
+    <string name="Employee">Employee</string>
+    <string name="Project">Project</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
