@@ -21,25 +21,26 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline" />
 
         <EditText
-            android:id="@+id/editTextName"
+            android:id="@+id/editTextId"
             android:layout_width="match_parent"
+            android:inputType="number"
             android:layout_height="wrap_content"
             android:hint="Id?" />
 
         <EditText
-            android:id="@+id/editTextMobile"
+            android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name" />
 
         <EditText
-            android:id="@+id/editTextEmail"
+            android:id="@+id/editTextBand"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="band" />
 
         <EditText
-            android:id="@+id/editTextaddress"
+            android:id="@+id/editTextDesignation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Designation" />

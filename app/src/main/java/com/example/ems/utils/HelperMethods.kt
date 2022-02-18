@@ -16,6 +16,18 @@ class HelperMethods {
          }
          return false
      }
+
+     fun addFragment(fragment: Fragment?, fragmentManager: FragmentManager): Boolean {
+         if (fragment != null) {
+             fragmentManager
+                 .beginTransaction()
+                 .replace(R.id.frame_container, fragment)
+                 .addToBackStack(null)
+                 .commit()
+             return true
+         }
+         return false
+     }
  }
 
 }
