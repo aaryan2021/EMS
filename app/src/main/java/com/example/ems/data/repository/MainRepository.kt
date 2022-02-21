@@ -64,4 +64,11 @@ class MainRepository @Inject constructor(var appdataBase: EmsDataBase) {
 
     }
 
+    fun removeEmployee(employee: Employee){
+        GlobalScope.launch(Dispatchers.IO) {
+            appdataBase.appdao().deleteEmployee(employee)
+        }
+
+    }
+
 }

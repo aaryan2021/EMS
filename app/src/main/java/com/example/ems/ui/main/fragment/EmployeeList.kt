@@ -1,5 +1,6 @@
 package com.example.ems.ui.main.fragment
 
+import android.R.attr
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -20,6 +21,20 @@ import com.example.ems.ui.main.viewmodel.EmployeeViewModel
 import com.example.ems.utils.AdapterClickListener
 import com.example.ems.utils.HelperMethods
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.recyclerview.widget.ItemTouchHelper
+
+import com.google.android.material.snackbar.Snackbar
+
+import androidx.annotation.NonNull
+
+import com.example.ems.utils.SwipeToDeleteCallback
+import android.R.attr.data
+
+
+
+
+
+
 
 @AndroidEntryPoint
 class EmployeeList : Fragment(),AdapterClickListener{
@@ -28,6 +43,7 @@ class EmployeeList : Fragment(),AdapterClickListener{
     var list:RecyclerView?=null
     var add:ImageView?=null
     var employeeList:List<Employee>?=null
+    var adapter:recyclerAdapter?=null
     private val viewModel by viewModels<EmployeeViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +57,7 @@ class EmployeeList : Fragment(),AdapterClickListener{
         // Inflate the layout for this fragment
         rootView= inflater.inflate(R.layout.fragment_employee_list, container, false)
         init()
+        enableSwipeToDeleteAndUndo()
         return rootView
     }
 
@@ -59,6 +76,7 @@ class EmployeeList : Fragment(),AdapterClickListener{
     }
 
     fun getData(){
+        employeeList=ArrayList()
         viewModel.getData().observe(requireActivity(), Observer {
             if(it.isNullOrEmpty()){
                 nodata!!.visibility=View.VISIBLE
@@ -67,9 +85,14 @@ class EmployeeList : Fragment(),AdapterClickListener{
                 employeeList=it
                 nodata!!.visibility=View.GONE
             }
-            list!!.adapter= recyclerAdapter(employeeList!!,requireActivity(),this)
+            adapter=recyclerAdapter(employeeList!!,requireActivity(),this)
+            list!!.adapter= adapter
         })
+    }
 
+    fun deleteEmployee(employee: Employee){
+        viewModel.removeEmployee(employee)
+        getData()
     }
 
     override fun onItemClick(position: Int) {
@@ -84,5 +107,18 @@ class EmployeeList : Fragment(),AdapterClickListener{
         fragment.arguments=bundle
         HelperMethods.addFragment(fragment, requireActivity()!!.supportFragmentManager)
     }
+
+    private fun enableSwipeToDeleteAndUndo() {
+        val swipeToDeleteCallback: SwipeToDeleteCallback = object : SwipeToDeleteCallback(activity) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {
+                val position = viewHolder.adapterPosition
+                val item: Employee = employeeList!!.get(position)
+                deleteEmployee(item)
+            }
+        }
+        val itemTouchhelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchhelper.attachToRecyclerView(list)
+    }
+
 
 }

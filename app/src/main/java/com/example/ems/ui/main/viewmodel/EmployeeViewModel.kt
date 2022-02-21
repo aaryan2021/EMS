@@ -32,4 +32,8 @@ class EmployeeViewModel @Inject constructor(var mainRepository: MainRepository):
         return  mainRepository.getProject()
     }
 
+    fun removeEmployee(employee: Employee){
+        mainRepository.removeEmployee(employee)
+    }
+
 }

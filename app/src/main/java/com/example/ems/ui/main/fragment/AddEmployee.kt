@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RadioButton
 import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import com.example.ems.R
@@ -26,9 +27,14 @@ class AddEmployee : Fragment() {
     var project:EditText?=null
     var btnsave:Button?=null
     var employee:Employee?=null
-    var Id:String?=null
-
+    var Android:RadioButton?=null
+    var Ios:RadioButton?=null
+    var Web:RadioButton?=null
     private val viewModel by viewModels<EmployeeViewModel>()
+
+    companion object{
+       var techValue="0"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +71,9 @@ class AddEmployee : Fragment() {
         editTextBand=rootView!!.findViewById(R.id.editTextBand)
         editTextDesignation=rootView!!.findViewById(R.id.editTextDesignation)
         project=rootView!!.findViewById(R.id.project)
+        Android=rootView!!.findViewById(R.id.Android)
+        Ios=rootView!!.findViewById(R.id.Ios)
+        Web=rootView!!.findViewById(R.id.Web)
         btnsave=rootView!!.findViewById(R.id.button_save)
         btnsave!!.setOnClickListener(View.OnClickListener {
             saveData()
@@ -75,6 +84,7 @@ class AddEmployee : Fragment() {
             editTextBand!!.setText(employee!!.employeeBand)
             editTextDesignation!!.setText(employee!!.designation)
             project!!.setText(employee!!.project)
+            setTechValue(employee!!.technology.toString())
         }
     }
 
@@ -85,6 +95,7 @@ class AddEmployee : Fragment() {
         employee!!.designation=editTextDesignation!!.text.toString()
         employee!!.employeeBand=editTextBand!!.text.toString()
         employee!!.project=project!!.text.toString()
+        employee!!.technology= getTechValue()
         if(!requireArguments().containsKey("id")){
             var edtName =editTextName!!.text.toString()
             var edtid=editTextId!!.text.toString()
@@ -121,10 +132,38 @@ class AddEmployee : Fragment() {
                 project!!.requestFocus();
                 return;
             }
-            viewModel.insertData(edtid.toInt(),edtName,band,designation,"Android",projects)
+            viewModel.insertData(edtid.toInt(),edtName,band,designation, getTechValue(),projects)
         }else{
             viewModel.updateEmployee(employee!!)
         }
         requireActivity().supportFragmentManager.popBackStack()
+    }
+
+    private fun getTechValue():String{
+        when {
+            Android!!.isChecked -> {
+                techValue="0"
+            }
+            Ios!!.isChecked -> {
+                techValue="1"
+            }
+            else -> {
+                techValue="2"
+            }
+        }
+        return techValue
+    }
+    fun setTechValue(data:String){
+        when {
+            data.equals("0") -> {
+                Android!!.isChecked=true
+            }
+            data.equals("1") -> {
+                Ios!!.isChecked=true
+            }
+            else -> {
+                Web!!.isChecked=true
+            }
+        }
     }
 }
